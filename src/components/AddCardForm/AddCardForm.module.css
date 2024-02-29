@@ -1,0 +1,16 @@
+.addCardPlus {
+    padding: 5px;
+    background-color: lightgray;
+    border-radius: 7px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.addCardInput {
+    margin-bottom: 10px;
+}
+.closeCardForm {
+    cursor: pointer;
+}
