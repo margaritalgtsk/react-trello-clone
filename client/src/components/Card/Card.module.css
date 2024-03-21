@@ -1,0 +1,36 @@
+.cardWrapper {
+    position: relative;
+}
+
+.editCardIcon {
+    cursor: pointer;
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+
+.cardThumb {
+    width: 100%;
+    padding-top: 10px;
+}
+
+.modalThumb {
+    width: 100px;
+}
+
+.cardForm {
+    max-width: 600px;
+}
+
+.buttonUpload {
+    border: 0;
+    background: none;
+}
+
+.buttonUploadText {
+    margin-top: 8px;
+}
+
+.imagePreview {
+    width: 100%;
+}

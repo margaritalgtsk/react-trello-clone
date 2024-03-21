@@ -7,6 +7,13 @@ export const store = configureStore({
         error: errorSlice,
         board: boardSlice
     },
+    middleware: (getDefaultMiddleware) =>
+        getDefaultMiddleware({
+            serializableCheck: {
+                ignoredActions: ['board/editItem', 'board/moveItem'],
+                ignoredPaths: ['board']
+            }
+        }),
 })
 
 export type RootState = ReturnType<typeof store.getState>;

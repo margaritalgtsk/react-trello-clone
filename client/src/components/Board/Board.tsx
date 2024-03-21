@@ -14,10 +14,11 @@ import {moveItem, selectItems} from "../../store/slices/boardSlice";
 import {IBoardStateItem, ICard} from "../../types/types";
 import _ from "lodash";
 import classes from './Board.module.css';
+import Card from "../Card/Card";
 
 const Board: React.FC = () => {
 
-    const items = useAppSelector(selectItems);
+    const items = useAppSelector(selectItems)
     const dispatch = useAppDispatch();
 
     const handleDragEnd = ({destination , source}: DropResult): void => {
@@ -57,7 +58,13 @@ const Board: React.FC = () => {
                                                                     {...provided.draggableProps}
                                                                     {...provided.dragHandleProps}
                                                                 >
-                                                                    {el.title}
+                                                                    <Card
+                                                                        id={el.id}
+                                                                        list={key}
+                                                                        title={el.title}
+                                                                        description={el.description}
+                                                                        images={el.images}
+                                                                    />
                                                                 </div>
                                                             )
                                                         }}

@@ -1,6 +1,10 @@
+import {UploadFile} from "antd";
+
 export interface ICard {
     id: string;
     title: string;
+    description?: string;
+    images?: UploadFile[];
 }
 export interface IBoardStateItem {
     title: string;
@@ -13,4 +17,10 @@ export interface IBoardState {
 export interface IDraggableProps {
     droppableId: string;
     index: number;
+}
+
+export interface IEditFormValues {
+    title: string;
+    description: string;
+    images?: UploadFile[];
 }
