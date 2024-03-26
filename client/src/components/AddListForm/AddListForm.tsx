@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import {useAppDispatch} from "../../store/hooks";
 import {setError} from "../../store/slices/errorSlice";
 import {addList} from "../../store/slices/boardSlice";
+import {v4} from 'uuid';
 import {Button, Input} from "antd";
 import {HiOutlinePlus} from "react-icons/hi";
 import {IoMdClose} from "react-icons/io";
@@ -16,7 +17,11 @@ const AddListForm: React.FC = () => {
         if(!listTitle) {
             dispatch(setError('Please, add title for list'))
         } else {
-            dispatch(addList(listTitle))
+            const listItem = {
+                id: v4(),
+                title: listTitle
+            }
+            dispatch(addList(listItem))
             setListTitle('')
             setVisibleListForm(false)
         }

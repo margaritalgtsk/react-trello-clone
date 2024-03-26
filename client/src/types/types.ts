@@ -8,10 +8,14 @@ export interface ICard {
 }
 export interface IBoardStateItem {
     title: string;
-    items: ICard[];
+    tasks: ICard[];
 }
 export interface IBoardState {
-    [key: string]: IBoardStateItem;
+    lists: {
+        [key: string]: IBoardStateItem;
+    };
+    order: string[];
+
 }
 
 export interface IDraggableProps {

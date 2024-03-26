@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {Button, Modal, Form, Input, Upload, UploadFile, GetProp, UploadProps} from 'antd';
 import {useAppDispatch} from "../../store/hooks";
-import {editItem} from "../../store/slices/boardSlice";
+import {editCard} from "../../store/slices/boardSlice";
 import {setError} from "../../store/slices/errorSlice";
 import {IEditFormValues} from "../../types/types";
 import {MdOutlineModeEdit} from "react-icons/md";
@@ -98,7 +98,7 @@ const Card: React.FC<ICardProps> = ({id, title, description, list, images}) => {
             dispatch(setError(`Upload error, ${response.statusText}`))
         } else {
             setIsModalOpen(false);
-            dispatch(editItem({id, list, values}))
+            dispatch(editCard({id, list, values}))
         }
     };
 

@@ -10,7 +10,7 @@ export const store = configureStore({
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware({
             serializableCheck: {
-                ignoredActions: ['board/editItem', 'board/moveItem'],
+                ignoredActions: ['board/editCard', 'board/moveCard'],
                 ignoredPaths: ['board']
             }
         }),

@@ -2,84 +2,60 @@ import React from 'react';
 import {
     DragDropContext,
     Droppable,
-    Draggable,
-    DraggableProvided,
     DroppableProvided,
-    DraggableStateSnapshot, DropResult
+    DropResult
 } from 'react-beautiful-dnd';
 import AddListForm from "../AddListForm/AddListForm";
-import AddCardForm from "../AddCardForm/AddCardForm";
 import {useAppDispatch, useAppSelector} from "../../store/hooks";
-import {moveItem, selectItems} from "../../store/slices/boardSlice";
-import {IBoardStateItem, ICard} from "../../types/types";
-import _ from "lodash";
+import {moveCard, reorderLists, selectLists, selectOrder} from "../../store/slices/boardSlice";
+import Column from "../Column/Column";
 import classes from './Board.module.css';
-import Card from "../Card/Card";
+
 
 const Board: React.FC = () => {
 
-    const items = useAppSelector(selectItems)
+    const lists = useAppSelector(selectLists);
+    const columnOrder = useAppSelector(selectOrder);
     const dispatch = useAppDispatch();
 
-    const handleDragEnd = ({destination , source}: DropResult): void => {
+    const handleDragEnd = ({destination , source, type, draggableId}: DropResult): void => {
         if (!destination) {
             return
         }
-        if (destination.index === source.index && destination.droppableId === source.droppableId) {
-            return
+        if(type === 'column') {
+            const newColumnOrder = Array.from(columnOrder);
+            newColumnOrder.splice(source.index, 1);
+            newColumnOrder.splice(destination.index, 0, draggableId);
+            dispatch(reorderLists(newColumnOrder))
+        } else {
+            if (destination.index === source.index && destination.droppableId === source.droppableId) {
+                return
+            }
+            const cardCopy = {...lists[source.droppableId].tasks[source.index]}
+            dispatch(moveCard({destination, source, cardCopy}))
         }
-        const itemCopy = {...items[source.droppableId].items[source.index]}
-        dispatch(moveItem({destination, source, itemCopy}))
     }
 
     return (
         <div className={classes.boardWrapper}>
             <DragDropContext onDragEnd={handleDragEnd}>
-                {_.map(items, (data: IBoardStateItem, key: string) => {
-                    return (
-                        <div key={key} className={classes.boardColumn}>
-                            <h3>{data.title}</h3>
-                            <Droppable droppableId={key}>
-                                {(provided: DroppableProvided) => {
-                                    return (
-                                        <div
-                                            ref={provided.innerRef}
-                                            {...provided.droppableProps}
-                                        >
-                                            {data.items.map((el: ICard, index: number) => {
-                                                return (
-                                                    <Draggable key={el.id} index={index} draggableId={el.id}>
-                                                        {(provided: DraggableProvided, snapshot: DraggableStateSnapshot) => {
-                                                            const draggingClass = snapshot.isDragging ? classes.cardItemDragging : '';
-                                                            return (
-                                                                <div
-                                                                    className={`${classes.cardItem} ${draggingClass}`}
-                                                                    ref={provided.innerRef}
-                                                                    {...provided.draggableProps}
-                                                                    {...provided.dragHandleProps}
-                                                                >
-                                                                    <Card
-                                                                        id={el.id}
-                                                                        list={key}
-                                                                        title={el.title}
-                                                                        description={el.description}
-                                                                        images={el.images}
-                                                                    />
-                                                                </div>
-                                                            )
-                                                        }}
-                                                    </Draggable>
-                                                )
-                                            })}
-                                            {provided.placeholder}
-                                        </div>
-                                    )
-                                }}
-                            </Droppable>
-                            <AddCardForm listTitle={key}/>
+                <Droppable droppableId="all-columns" direction="horizontal" type="column">
+                    {(provided:  DroppableProvided) => (
+                        <div
+                            className={classes.boardContainer}
+                            ref={provided.innerRef}
+                            {...provided.droppableProps}
+                        >
+                            {columnOrder.map((columnId: string, index: number) => {
+                                const column = lists[columnId];
+                                return (
+                                    <Column key={columnId} columnId={columnId} column={column} index={index} />
+                                )
+                            })}
+                            {provided.placeholder}
                         </div>
-                    )
-                })}
+                    )}
+                </Droppable>
             </DragDropContext>
             <AddListForm/>
         </div>

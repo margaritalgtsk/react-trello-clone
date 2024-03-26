@@ -3,15 +3,22 @@ import {createSlice} from '@reduxjs/toolkit'
 import {IBoardState, ICard, IDraggableProps, IEditFormValues} from "../../types/types";
 import {RootState} from "../index";
 
-interface IAddItemActionPayload {
-    item: ICard;
+interface IAddListActionPayload {
+    id: string;
+    title: string;
+}
+
+interface IAddCardActionPayload {
+    cardItem: ICard;
     listTitle: string;
 }
-interface IMoveItemActionPayload {
+
+interface IMoveCardActionPayload {
     source: IDraggableProps;
     destination: IDraggableProps;
-    itemCopy: ICard;
+    cardCopy: ICard;
 }
+
 interface IEditItemActionPayload {
     id: string;
     list: string;
@@ -19,57 +26,74 @@ interface IEditItemActionPayload {
 }
 
 const initialState: IBoardState = {
-    "todo": {
-        title: "Todo",
-        items: []
+    lists : {
+        'todo': {
+            title: 'Todo',
+            tasks: [{
+                id: 'id-123-feed-the-cat',
+                title: 'feed the cat'
+            }]
+        },
+        'in-progress': {
+            title: 'In Progress',
+            tasks: []
+        },
+        'done': {
+            title: 'Completed',
+            tasks: []
+        }
     },
-    "in-progress": {
-        title: "In Progress",
-        items: []
-    },
-    "done": {
-        title: "Completed",
-        items: []
-    }
+    order: ['todo', 'in-progress', 'done']
 }
 
 export const boardSlice = createSlice({
     name: 'board',
     initialState,
     reducers: {
-        addList: (state, action: PayloadAction<string>) => {
+        addList: (state, action: PayloadAction<IAddListActionPayload>) => {
             return {
                 ...state,
-                [action.payload] : {
-                    title: action.payload,
-                    items: []
-                }
+                lists: {
+                    ...state.lists,
+                    [action.payload.id] : {
+                        title: action.payload.title,
+                        tasks: []
+                    }
+                },
+                order: [
+                    ...state.order,
+                    action.payload.id
+                ]
             }
         },
-        addItem: (state, action: PayloadAction<IAddItemActionPayload>) => {
-            state[action.payload.listTitle].items.push(action.payload.item)
+        addCard: (state, action: PayloadAction<IAddCardActionPayload>) => {
+            state.lists[action.payload.listTitle].tasks.push(action.payload.cardItem)
         },
-        moveItem: (state, action: PayloadAction<IMoveItemActionPayload>) => {
-            state[action.payload.source.droppableId].items.splice(action.payload.source.index, 1)
-            state[action.payload.destination.droppableId].items.splice(action.payload.destination.index, 0, action.payload.itemCopy)
+        moveCard: (state, action: PayloadAction<IMoveCardActionPayload>) => {
+            state.lists[action.payload.source.droppableId].tasks.splice(action.payload.source.index, 1)
+            state.lists[action.payload.destination.droppableId].tasks.splice(action.payload.destination.index, 0, action.payload.cardCopy)
         },
-        editItem: (state, action: PayloadAction<IEditItemActionPayload>) => {
-            state[action.payload.list].items.map((item) => {
-                if(item.id === action.payload.id) {
-                    if(item.title !== action.payload.values.title) {
-                        item.title = action.payload.values.title
+        editCard: (state, action: PayloadAction<IEditItemActionPayload>) => {
+            state.lists[action.payload.list].tasks.map((task) => {
+                if(task.id === action.payload.id) {
+                    if(task.title !== action.payload.values.title) {
+                        task.title = action.payload.values.title
                     }
-                    if(item.description !== action.payload.values.description) {
-                        item.description = action.payload.values.description
+                    if(task.description !== action.payload.values.description) {
+                        task.description = action.payload.values.description
                     }
-                    item.images = action.payload.values.images;
+                    task.images = action.payload.values.images;
                 }
-                return item;
+                return task;
             })
+        },
+        reorderLists: (state, action: PayloadAction<string[]>) => {
+            state.order = action.payload;
         }
     },
 })
 
-export const { addList, addItem, moveItem, editItem} = boardSlice.actions;
-export const selectItems = (state: RootState) => state.board;
+export const { addList, addCard, moveCard, editCard, reorderLists} = boardSlice.actions;
+export const selectLists = (state: RootState) => state.board.lists;
+export const selectOrder = (state: RootState) => state.board.order;
 export default boardSlice.reducer;

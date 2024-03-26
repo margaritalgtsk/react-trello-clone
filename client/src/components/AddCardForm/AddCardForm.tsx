@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {useAppDispatch} from "../../store/hooks";
 import {setError} from "../../store/slices/errorSlice";
-import {addItem} from "../../store/slices/boardSlice";
+import {addCard} from "../../store/slices/boardSlice";
 import {v4} from 'uuid';
 import {Button, Input} from "antd";
 import {HiOutlinePlus} from "react-icons/hi";
@@ -21,11 +21,11 @@ const AddCardForm: React.FC<IAddCardFormProps> = ({listTitle}) => {
         if (!cardTitle){
             dispatch(setError('Please, add title for card'))
         } else {
-            const item = {
+            const cardItem = {
                 id: v4(),
                 title: cardTitle
             }
-            dispatch(addItem({item, listTitle}))
+            dispatch(addCard({cardItem, listTitle}))
             setCardTitle('')
             setVisibleCardForm(false)
         }
