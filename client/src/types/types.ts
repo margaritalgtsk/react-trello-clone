@@ -5,17 +5,19 @@ export interface ICard {
     title: string;
     description?: string;
     images?: UploadFile[];
+    cover?: UploadFile;
 }
+
 export interface IBoardStateItem {
     title: string;
     tasks: ICard[];
 }
+
 export interface IBoardState {
     lists: {
         [key: string]: IBoardStateItem;
     };
     order: string[];
-
 }
 
 export interface IDraggableProps {
@@ -26,5 +28,4 @@ export interface IDraggableProps {
 export interface IEditFormValues {
     title: string;
     description: string;
-    images?: UploadFile[];
 }

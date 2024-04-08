@@ -1,0 +1,20 @@
+.imageWrapper {
+    display: flex;
+    margin-bottom: 10px;
+}
+
+.imageThumb {
+    width: 120px;
+    height: 120px;
+    padding: 5px;
+    object-fit: cover;
+    border: 1px solid #e8e6e6;
+}
+
+.imageOptions {
+    padding-left: 10px;
+}
+
+.imageRemove {
+    cursor: pointer;
+}

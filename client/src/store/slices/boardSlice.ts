@@ -2,6 +2,7 @@ import type {PayloadAction} from '@reduxjs/toolkit'
 import {createSlice} from '@reduxjs/toolkit'
 import {IBoardState, ICard, IDraggableProps, IEditFormValues} from "../../types/types";
 import {RootState} from "../index";
+import {UploadFile} from "antd";
 
 interface IAddListActionPayload {
     id: string;
@@ -23,6 +24,22 @@ interface IEditItemActionPayload {
     id: string;
     list: string;
     values: IEditFormValues;
+}
+
+interface IAddImageActionPayload {
+    id: string;
+    list: string;
+    file: UploadFile;
+}
+interface IRemoveImageActionPayload {
+    id: string;
+    list: string;
+    imageId: string;
+}
+interface ISetCoverImageActionPayload {
+    id: string;
+    list: string;
+    image: UploadFile | undefined;
 }
 
 const initialState: IBoardState = {
@@ -51,20 +68,9 @@ export const boardSlice = createSlice({
     initialState,
     reducers: {
         addList: (state, action: PayloadAction<IAddListActionPayload>) => {
-            return {
-                ...state,
-                lists: {
-                    ...state.lists,
-                    [action.payload.id] : {
-                        title: action.payload.title,
-                        tasks: []
-                    }
-                },
-                order: [
-                    ...state.order,
-                    action.payload.id
-                ]
-            }
+            const {id, title} = action.payload
+            state.lists[id] = {title, tasks: []}
+            state.order.push(id)
         },
         addCard: (state, action: PayloadAction<IAddCardActionPayload>) => {
             state.lists[action.payload.listTitle].tasks.push(action.payload.cardItem)
@@ -74,7 +80,7 @@ export const boardSlice = createSlice({
             state.lists[action.payload.destination.droppableId].tasks.splice(action.payload.destination.index, 0, action.payload.cardCopy)
         },
         editCard: (state, action: PayloadAction<IEditItemActionPayload>) => {
-            state.lists[action.payload.list].tasks.map((task) => {
+            state.lists[action.payload.list].tasks.forEach((task: ICard): void => {
                 if(task.id === action.payload.id) {
                     if(task.title !== action.payload.values.title) {
                         task.title = action.payload.values.title
@@ -82,9 +88,34 @@ export const boardSlice = createSlice({
                     if(task.description !== action.payload.values.description) {
                         task.description = action.payload.values.description
                     }
-                    task.images = action.payload.values.images;
                 }
-                return task;
+            })
+        },
+        addImage: (state, action: PayloadAction<IAddImageActionPayload>) => {
+            state.lists[action.payload.list].tasks.forEach((task: ICard): void => {
+                if(task.id === action.payload.id) {
+                    if(typeof task.images === "undefined") {
+                        task.images = [];
+                    }
+                    task.images.push(action.payload.file)
+                }
+            })
+        },
+        removeImage: (state, action: PayloadAction<IRemoveImageActionPayload>) => {
+            state.lists[action.payload.list].tasks.forEach((task: ICard): void => {
+                if(task.id === action.payload.id) {
+                    task.images = task.images?.filter(image => image.uid !== action.payload.imageId)
+                    if(task.cover?.uid === action.payload.imageId) {
+                        task.cover = undefined
+                    }
+                }
+            })
+        },
+        setCoverImage: (state, action: PayloadAction<ISetCoverImageActionPayload>) => {
+            state.lists[action.payload.list].tasks.forEach((task: ICard): void => {
+                if(task.id === action.payload.id) {
+                    task.cover = action.payload.image
+                }
             })
         },
         reorderLists: (state, action: PayloadAction<string[]>) => {
@@ -93,7 +124,7 @@ export const boardSlice = createSlice({
     },
 })
 
-export const { addList, addCard, moveCard, editCard, reorderLists} = boardSlice.actions;
+export const { addList, addCard, moveCard, editCard, addImage, removeImage, setCoverImage, reorderLists} = boardSlice.actions;
 export const selectLists = (state: RootState) => state.board.lists;
 export const selectOrder = (state: RootState) => state.board.order;
 export default boardSlice.reducer;

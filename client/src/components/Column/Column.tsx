@@ -49,6 +49,7 @@ const Column: React.FC<IColumnProps> = ({columnId, column, index}) => {
                                                                     title={el.title}
                                                                     description={el.description}
                                                                     images={el.images}
+                                                                    cover={el.cover}
                                                                 />
                                                             </div>
                                                         )
