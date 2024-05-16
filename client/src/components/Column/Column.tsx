@@ -1,17 +1,21 @@
 import React from 'react';
 import {Draggable, DraggableProvided, DraggableStateSnapshot, Droppable, DroppableProvided} from "react-beautiful-dnd";
 import Card from "../Card/Card";
-import {IBoardStateItem, ICard} from "../../types/types";
+import {ICard, IListContent} from "../../types/types";
 import AddCardForm from "../AddCardForm/AddCardForm";
 import classes from "./Column.module.css"
+import {useAppSelector} from "../../store/hooks";
+import {selectSearchQuery} from "../../store/slices/boardSlice";
 
 interface IColumnProps {
     columnId: string;
-    column: IBoardStateItem;
     index: number;
+    column: IListContent;
 }
 
 const Column: React.FC<IColumnProps> = ({columnId, column, index}) => {
+
+    const searchQuery = useAppSelector(selectSearchQuery);
 
     return (
         <Draggable draggableId={columnId} index={index} key={columnId}>
@@ -24,6 +28,8 @@ const Column: React.FC<IColumnProps> = ({columnId, column, index}) => {
                         {...provided.draggableProps}
                     >
                         <h3  {...provided.dragHandleProps}>{column.title}</h3>
+                        {searchQuery && <p className={classes.matchFilters}>{column.tasks.filter(task => task.isSearchMatch).length} cards match filters</p>}
+
                         <Droppable droppableId={columnId} type="task">
                             {(provided: DroppableProvided) => {
                                 return (
@@ -31,26 +37,27 @@ const Column: React.FC<IColumnProps> = ({columnId, column, index}) => {
                                         ref={provided.innerRef}
                                         {...provided.droppableProps}
                                     >
-                                        {column.tasks.map((el: ICard, index: number) => {
+                                        {column.tasks && column.tasks.map((el: ICard, index: number) => {
                                             return (
                                                 <Draggable key={el.id} index={index} draggableId={el.id}>
                                                     {(provided: DraggableProvided, snapshot: DraggableStateSnapshot) => {
                                                         const draggingCardClass = snapshot.isDragging ? classes.cardItemDragging : '';
                                                         return (
                                                             <div
-                                                                className={`${classes.cardItem} ${draggingCardClass}`}
                                                                 ref={provided.innerRef}
                                                                 {...provided.draggableProps}
                                                                 {...provided.dragHandleProps}
                                                             >
-                                                                <Card
-                                                                    id={el.id}
-                                                                    list={columnId}
-                                                                    title={el.title}
-                                                                    description={el.description}
-                                                                    images={el.images}
-                                                                    cover={el.cover}
-                                                                />
+                                                                <div className={`${classes.cardItem} ${draggingCardClass} ${el.isSearchMatch ? '' : classes.cardHidden}`}>
+                                                                    <Card
+                                                                        id={el.id}
+                                                                        list={columnId}
+                                                                        title={el.title}
+                                                                        description={el.description}
+                                                                        images={el.images}
+                                                                        cover={el.cover}
+                                                                    />
+                                                                </div>
                                                             </div>
                                                         )
                                                     }}

@@ -46,21 +46,57 @@ const initialState: IBoardState = {
     lists : {
         'todo': {
             title: 'Todo',
-            tasks: [{
-                id: 'id-123-feed-the-cat',
-                title: 'feed the cat'
-            }]
+            tasks: [
+                {
+                    id: 'id-123-feed-the-cat',
+                    title: 'feed the cat',
+                    isSearchMatch: true
+                },
+                {
+                    id: 'id-124-feed-the-dog',
+                    title: 'feed the dog',
+                    isSearchMatch: true
+                }
+            ]
         },
         'in-progress': {
             title: 'In Progress',
-            tasks: []
+            tasks: [
+                {
+                    id: 'id-125-feed-the-parrot',
+                    title: 'feed the parrot',
+                    isSearchMatch: true
+                },
+                {
+                    id: 'id-126-feed-the-turtle',
+                    title: 'feed the turtle',
+                    isSearchMatch: true
+                },
+                {
+                    id: 'id-128-feed-the-capybara',
+                    title: 'feed the capybara',
+                    isSearchMatch: true
+                }
+            ]
         },
         'done': {
             title: 'Completed',
-            tasks: []
+            tasks: [
+                {
+                    id: 'id-127-feed-the-mouse',
+                    title: 'feed the mouse',
+                    isSearchMatch: true
+                },
+                {
+                    id: 'id-129-feed-the-dingo',
+                    title: 'feed the dingo',
+                    isSearchMatch: true
+                }
+            ]
         }
     },
-    order: ['todo', 'in-progress', 'done']
+    order: ['todo', 'in-progress', 'done'],
+    searchQuery: ''
 }
 
 export const boardSlice = createSlice({
@@ -119,12 +155,30 @@ export const boardSlice = createSlice({
             })
         },
         reorderLists: (state, action: PayloadAction<string[]>) => {
-            state.order = action.payload;
-        }
+           state.order = action.payload;
+        },
+        searchCards: (state, action: PayloadAction<string>) => {
+           state.searchQuery = action.payload;
+           Object.values(state.lists).forEach((list) => {
+               list.tasks = list.tasks.map(task => ({
+                   ...task,
+                   isSearchMatch: task.title.toLowerCase().includes(action.payload.toLowerCase())
+               }));
+           });
+        },
     },
 })
 
-export const { addList, addCard, moveCard, editCard, addImage, removeImage, setCoverImage, reorderLists} = boardSlice.actions;
+export const { addList,
+    addCard,
+    moveCard,
+    editCard,
+    addImage,
+    removeImage,
+    setCoverImage,
+    reorderLists,
+    searchCards} = boardSlice.actions;
 export const selectLists = (state: RootState) => state.board.lists;
 export const selectOrder = (state: RootState) => state.board.order;
+export const selectSearchQuery = (state: RootState) => state.board.searchQuery;
 export default boardSlice.reducer;

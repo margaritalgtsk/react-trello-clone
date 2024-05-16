@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
-import {useAppDispatch} from "../../store/hooks";
+import {useAppDispatch, useAppSelector} from "../../store/hooks";
 import {setError} from "../../store/slices/errorSlice";
-import {addCard} from "../../store/slices/boardSlice";
+import {addCard, selectSearchQuery} from "../../store/slices/boardSlice";
 import {v4} from 'uuid';
 import {Button, Input} from "antd";
 import {HiOutlinePlus} from "react-icons/hi";
@@ -15,6 +15,7 @@ const AddCardForm: React.FC<IAddCardFormProps> = ({listTitle}) => {
 
     const [cardTitle, setCardTitle] = useState<string>('');
     const [visibleCardForm, setVisibleCardForm] = useState<boolean>(false);
+    const searchQuery = useAppSelector(selectSearchQuery);
     const dispatch = useAppDispatch();
 
     const addCardTitle = (): void => {
@@ -23,7 +24,8 @@ const AddCardForm: React.FC<IAddCardFormProps> = ({listTitle}) => {
         } else {
             const cardItem = {
                 id: v4(),
-                title: cardTitle
+                title: cardTitle,
+                isSearchMatch: cardTitle.toLowerCase().includes(searchQuery.toLowerCase())
             }
             dispatch(addCard({cardItem, listTitle}))
             setCardTitle('')

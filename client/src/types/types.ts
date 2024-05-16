@@ -6,18 +6,22 @@ export interface ICard {
     description?: string;
     images?: UploadFile[];
     cover?: UploadFile;
+    isSearchMatch: boolean;
 }
 
-export interface IBoardStateItem {
+export interface IListContent {
     title: string;
     tasks: ICard[];
 }
 
+export interface IList {
+    [key: string]: IListContent;
+}
+
 export interface IBoardState {
-    lists: {
-        [key: string]: IBoardStateItem;
-    };
+    lists: IList;
     order: string[];
+    searchQuery: string;
 }
 
 export interface IDraggableProps {

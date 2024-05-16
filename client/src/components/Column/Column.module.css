@@ -17,6 +17,10 @@
     background-color: #f5ead3;
 }
 
+.matchFilters {
+    color: #9E9E9E;
+}
+
 .cardItem {
     color: white;
     margin-bottom: 10px;
@@ -30,4 +34,6 @@
     background-color: #ffc5c4;
 }
 
-
+.cardHidden {
+    display: none;
+}

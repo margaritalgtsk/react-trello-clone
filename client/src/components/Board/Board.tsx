@@ -6,15 +6,18 @@ import {
     DropResult
 } from 'react-beautiful-dnd';
 import AddListForm from "../AddListForm/AddListForm";
-import {useAppDispatch, useAppSelector} from "../../store/hooks";
-import {moveCard, reorderLists, selectLists, selectOrder} from "../../store/slices/boardSlice";
 import Column from "../Column/Column";
+import {IList} from "../../types/types";
+import {useAppDispatch, useAppSelector} from "../../store/hooks";
+import {moveCard, reorderLists, selectOrder} from "../../store/slices/boardSlice";
 import classes from './Board.module.css';
 
+interface IBoardProps {
+    lists: IList;
+}
 
-const Board: React.FC = () => {
+const Board: React.FC<IBoardProps> = ({lists}) => {
 
-    const lists = useAppSelector(selectLists);
     const columnOrder = useAppSelector(selectOrder);
     const dispatch = useAppDispatch();
 
@@ -40,16 +43,15 @@ const Board: React.FC = () => {
         <div className={classes.boardWrapper}>
             <DragDropContext onDragEnd={handleDragEnd}>
                 <Droppable droppableId="all-columns" direction="horizontal" type="column">
-                    {(provided:  DroppableProvided) => (
+                    {(provided: DroppableProvided) => (
                         <div
                             className={classes.boardContainer}
                             ref={provided.innerRef}
                             {...provided.droppableProps}
                         >
                             {columnOrder.map((columnId: string, index: number) => {
-                                const column = lists[columnId];
                                 return (
-                                    <Column key={columnId} columnId={columnId} column={column} index={index} />
+                                    <Column key={columnId} columnId={columnId} column={lists[columnId]} index={index}/>
                                 )
                             })}
                             {provided.placeholder}

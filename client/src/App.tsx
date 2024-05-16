@@ -1,12 +1,12 @@
 import React from 'react';
-import Board from "./components/Board/Board";
+import Search from "./components/Search/Search";
 import Error from "./components/Error";
 import './App.css';
 
 function App() {
   return (
       <div className="App">
-          <Board />
+          <Search />
           <Error />
       </div>
   );
