@@ -1,0 +1,14 @@
+.header {
+    position: relative;
+    background-color: #0E8777;
+    margin-bottom: 20px;
+    padding: 10px;
+    display: flex;
+    justify-content: center;
+}
+
+.buttonLogout {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+}

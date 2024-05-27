@@ -10,13 +10,13 @@ const Error: React.FC = () => {
 
     useEffect(() => {
         if(errorMessage) {
-            toast(errorMessage);
+            toast.error(errorMessage);
             dispatch(clearError())
         }
     }, [errorMessage, dispatch]);
 
     return (
-            <ToastContainer/>
+            <ToastContainer />
     );
 };
 

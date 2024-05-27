@@ -1,11 +1,13 @@
 import { configureStore } from '@reduxjs/toolkit'
 import errorSlice from "./slices/errorSlice";
 import boardSlice from "./slices/boardSlice";
+import authSlice from "./slices/authSlice";
 
 export const store = configureStore({
     reducer: {
         error: errorSlice,
-        board: boardSlice
+        board: boardSlice,
+        auth: authSlice
     },
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware({

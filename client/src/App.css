@@ -2,3 +2,14 @@
   text-align: center;
   box-sizing: border-box;
 }
+
+nav a {
+  color: #000000;
+  font-size: 18px;
+  margin: 0 10px;
+  text-decoration: none;
+}
+
+nav a.active {
+  color: #ffffff;
+}
