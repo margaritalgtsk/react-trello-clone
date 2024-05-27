@@ -11,3 +11,14 @@
 .buttonLogin {
     margin-bottom: 0;
 }
+
+.formTitleLogin {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.formLoginSpin {
+    width: 25px;
+    height: 25px;
+    padding-left: 15px;
+}

@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 
 const cors = require('cors');
@@ -13,9 +14,7 @@ const adapter = new FileSync('./database.json')
 const db = low(adapter)
 
 const app = express();
-const port = 8080;
-
-const jwtSecretKey = 'dsfdsfsdfdsvcsvdfgefg'
+const port = process.env.PORT;
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
@@ -64,31 +63,26 @@ app.get('/', (_req, res) => {
     res.send('Auth API.\nPlease use POST /auth & POST /verify for authentication')
 })
 
+app.post('/auth', async (req, res) => {
+    try {
+        const { username, password } = req.body
+        const users = db.get('users').value();
+        const user = users.find(u => u.username === username);
 
-app.post('/auth', (req, res) => {
-    const { username, password } = req.body
+        if(!user) {
+            return res.status(401).json({message: 'User is not found'})
+        }
 
-    const user = db
-        .get('users')
-        .value()
-        .filter((user) => username === user.username)
+        const match = await bcrypt.compare(password, user.password)
 
-    if (user.length === 1) {
-        bcrypt.compare(password, user[0].password, function (_err, result) {
-            if (!result) {
-                return res.status(401).json({ message: 'Invalid password' })
-            } else {
-                let loginData = {
-                    username,
-                    signInTime: Date.now(),
-                }
-                const token = jwt.sign(loginData, jwtSecretKey)
-                console.log(token)
-                res.status(200).json({ message: 'Success', token })
-            }
-        })
-    } else if (user.length === 0) {
-        return res.status(401).json({ message: 'User is not found' })
+        if(!match) {
+            return res.status(401).json({message: 'Invalid password'})
+        }
+
+        const token = jwt.sign({username, signInTime: Date.now()}, process.env.JWT_SECRET)
+        res.status(200).json({message: 'Success', token})
+    } catch(error) {
+        res.status(500).json({ message: 'Internal server error' });
     }
 })
 

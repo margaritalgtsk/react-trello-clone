@@ -55,7 +55,15 @@ const initialState: IBoardState = {
                 {
                     id: 'id-124-feed-the-dog',
                     title: 'feed the dog',
-                    isSearchMatch: true
+                    isSearchMatch: true,
+                    images: [{
+                        uid: "rc-upload-1716805931623-2",
+                        name: "dog.jpg"
+                    }],
+                    cover: {
+                        uid: "rc-upload-1716805931623-2",
+                        name: "dog.jpg"
+                    }
                 }
             ]
         },
@@ -128,6 +136,7 @@ export const boardSlice = createSlice({
             })
         },
         addImage: (state, action: PayloadAction<IAddImageActionPayload>) => {
+            console.log(action.payload)
             state.lists[action.payload.list].tasks.forEach((task: ICard): void => {
                 if(task.id === action.payload.id) {
                     if(typeof task.images === "undefined") {

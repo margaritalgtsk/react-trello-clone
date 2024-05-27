@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-import type { FormProps } from 'antd';
+import {FormProps, Spin} from 'antd';
 import { Button, Form, Input } from 'antd';
 import {useAppDispatch, useAppSelector} from "../../store/hooks";
 import {userLogin} from "../../asyncActions/authAction";
@@ -14,7 +14,7 @@ type FieldType = {
 
 const Login = () => {
 
-    const {userInfo, error} = useAppSelector((state) => state.auth)
+    const {loading, userInfo, error} = useAppSelector((state) => state.auth)
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
 
@@ -34,28 +34,35 @@ const Login = () => {
             <Form
                 name="basic"
                 className={classes.formLogin}
-                labelCol={{ span: 4 }}
-                wrapperCol={{ span: 20 }}
+                labelCol={{span: 4}}
+                wrapperCol={{span: 20}}
                 onFinish={onFinish}
                 autoComplete="off"
             >
+                <div className={classes.formTitleLogin}>
+                    <h3>Please login to continue</h3>
+                    <div className={classes.formLoginSpin}>
+                        {loading && <Spin />}
+                    </div>
+                </div>
+
                 <Form.Item<FieldType>
                     label="Username"
                     name="username"
-                    rules={[{ required: true, message: 'Please input your username!' }]}
+                    rules={[{required: true, message: 'Please input your username!'}]}
                 >
-                    <Input />
+                    <Input/>
                 </Form.Item>
 
                 <Form.Item<FieldType>
                     label="Password"
                     name="password"
-                    rules={[{ required: true, message: 'Please input your password!' }]}
+                    rules={[{required: true, message: 'Please input your password!'}]}
                 >
-                    <Input.Password />
+                    <Input.Password/>
                 </Form.Item>
 
-                <Form.Item className={classes.buttonLogin} wrapperCol={{ span: 24 }}>
+                <Form.Item className={classes.buttonLogin} wrapperCol={{span: 24}}>
                     <Button type="primary" htmlType="submit">
                         Submit
                     </Button>
