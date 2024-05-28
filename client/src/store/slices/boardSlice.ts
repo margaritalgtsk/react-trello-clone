@@ -136,7 +136,6 @@ export const boardSlice = createSlice({
             })
         },
         addImage: (state, action: PayloadAction<IAddImageActionPayload>) => {
-            console.log(action.payload)
             state.lists[action.payload.list].tasks.forEach((task: ICard): void => {
                 if(task.id === action.payload.id) {
                     if(typeof task.images === "undefined") {
