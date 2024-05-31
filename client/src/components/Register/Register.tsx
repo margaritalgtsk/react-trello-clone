@@ -18,7 +18,7 @@ interface IRegisterProps {
 
 const Register: React.FC<IRegisterProps> = ({handleClick}) => {
 
-    const {loading, userInfo, userToken, success} = useAppSelector((state) => state.auth)
+    const {loading, userToken, success} = useAppSelector((state) => state.auth)
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
 
