@@ -17,7 +17,7 @@ interface ILoginProps {
 
 const Login: React.FC<ILoginProps> = ({handleClick}) => {
 
-    const {loading, userInfo, userToken, error} = useAppSelector((state) => state.auth)
+    const {loading, userToken} = useAppSelector((state) => state.auth)
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
 
