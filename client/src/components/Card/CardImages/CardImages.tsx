@@ -30,11 +30,11 @@ const CardImages: React.FC<ICardUploadProps> = ({id, list,images, cover}) => {
             if (response.ok) {
                 dispatch(addImage({ list, id, file: options.file as UploadFile}));
             } else {
-                dispatch(setError(`Server error, ${response.statusText}`));
+                dispatch(setError({message: `Server error, ${response.statusText}`, type: 'error'}));
             }
         })
         .catch(error => {
-            dispatch(setError(`Network error, ${error}`));
+            dispatch(setError({message: `Network error, ${error}`, type: 'error'}));
         });
     }
 

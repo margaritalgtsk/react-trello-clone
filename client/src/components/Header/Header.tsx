@@ -7,13 +7,13 @@ import {logout} from "../../store/slices/authSlice";
 
 const Header = () => {
 
-    const {userInfo} = useAppSelector((state) => state.auth)
+    const {userToken} = useAppSelector((state) => state.auth)
     const dispatch = useAppDispatch();
 
     return (
         <header className={classes.header}>
             <Navbar/>
-            {userInfo && <Button  className={classes.buttonLogout} onClick={() => dispatch(logout())}>Logout</Button>}
+            {userToken && <Button  className={classes.buttonLogout} onClick={() => dispatch(logout())}>Logout</Button>}
         </header>
     );
 };

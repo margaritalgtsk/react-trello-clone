@@ -20,7 +20,7 @@ const AddCardForm: React.FC<IAddCardFormProps> = ({listTitle}) => {
 
     const addCardTitle = (): void => {
         if (!cardTitle){
-            dispatch(setError('Please, add title for card'))
+            dispatch(setError({message: 'Please, add title for card', type: 'error'}))
         } else {
             const cardItem = {
                 id: v4(),

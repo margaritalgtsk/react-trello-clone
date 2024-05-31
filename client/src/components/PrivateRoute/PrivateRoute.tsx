@@ -8,9 +8,9 @@ interface IPrivateRouteProps {
 
 const PrivateRoute: React.FC<IPrivateRouteProps> = ({ Component }) => {
 
-    const {userInfo} = useAppSelector((state) => state.auth)
+    const {userToken} = useAppSelector((state) => state.auth)
 
-    return userInfo ? <Component /> : <Navigate to="/" />;
+    return userToken ? <Component /> : <Navigate to="/" />;
 };
 
 export default PrivateRoute;

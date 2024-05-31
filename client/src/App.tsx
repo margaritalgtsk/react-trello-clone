@@ -6,6 +6,7 @@ import Error from "./components/Error";
 import Home from "./components/Home/Home";
 import NotFound from "./components/NotFound/NotFound";
 import Layout from "./layouts/Layout";
+import Profile from "./components/Profile/Profile";
 import PrivateRoute from "./components/PrivateRoute/PrivateRoute";
 import './App.css';
 
@@ -30,6 +31,7 @@ function App() {
                         <Route path="/" element={<Layout />}>
                             <Route index element={<Home/>} />
                             <Route path="/dashboard" element={<PrivateRoute Component={Search} />} />
+                            <Route path="/profile" element={<PrivateRoute Component={Profile} />} />
                             <Route path="*" element={<NotFound/>}/>
                         </Route>
                     </Routes>

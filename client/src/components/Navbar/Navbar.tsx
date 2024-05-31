@@ -4,13 +4,17 @@ import {useAppSelector} from "../../store/hooks";
 
 const Navbar = () => {
 
-    const {userInfo} = useAppSelector((state) => state.auth)
+    const {userToken} = useAppSelector((state) => state.auth)
 
     return (
         <nav>
-            {userInfo
-                ? <NavLink to="/dashboard">Dashboard</NavLink>
-                : <NavLink to="/">Home</NavLink>
+            {userToken
+                ?
+                    <>
+                        <NavLink to="/dashboard">Dashboard</NavLink>
+                        <NavLink to="/profile">Profile</NavLink>
+                    </>
+                :  <NavLink to="/">Home</NavLink>
             }
         </nav>
     );

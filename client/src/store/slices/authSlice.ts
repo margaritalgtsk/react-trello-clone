@@ -1,12 +1,12 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit'
-import {MyData, userLogin} from "../../asyncActions/authAction";
-import {RootState} from "../index";
+import {MyData, userLogin, userRegister} from "../../asyncActions/authAction";
 
 interface IAuthState {
     loading: boolean;
     userInfo: string | null;
     userToken: string;
     error?: string;
+    success: boolean;
 }
 
 const initialState: IAuthState = {
@@ -14,6 +14,7 @@ const initialState: IAuthState = {
     userInfo: null,
     userToken: localStorage.getItem('userToken') ?? "",
     error: "",
+    success: false
 }
 
 const authSlice = createSlice({
@@ -41,9 +42,22 @@ const authSlice = createSlice({
             state.loading = false;
             state.error = action.payload;
         })
+        builder.addCase(userRegister.pending, (state) => {
+            state.loading = true;
+            state.error = ""
+        })
+        builder.addCase(userRegister.fulfilled, (state, action: PayloadAction<MyData>) => {
+            state.loading = false;
+            state.userToken = action.payload.token
+            state.success = true;
+        })
+        builder.addCase(userRegister.rejected, (state, action) => {
+            state.loading = false;
+            state.error = action.payload;
+        })
     },
 })
 
-export const { logout } = authSlice.actions
-export const selectUserLogin = (state: RootState) => state.auth.userInfo;
+export const {logout} = authSlice.actions
+
 export default authSlice.reducer

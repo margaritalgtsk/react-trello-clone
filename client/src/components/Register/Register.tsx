@@ -1,35 +1,38 @@
 import React, {useEffect} from 'react';
-import {FormProps, Spin} from 'antd';
-import {Button, Form, Input} from 'antd';
+import classes from "./Register.module.css";
+import {Button, Form, FormProps, Input, Spin} from "antd";
+import {userRegister} from "../../asyncActions/authAction";
 import {useAppDispatch, useAppSelector} from "../../store/hooks";
-import {userLogin} from "../../asyncActions/authAction";
 import {useNavigate} from "react-router-dom";
-import classes from "./Login.module.css";
+import {setError} from "../../store/slices/errorSlice";
 
 type FieldType = {
     username?: string;
     password?: string;
+    confirmPassword?: string;
 };
 
-interface ILoginProps {
+interface IRegisterProps {
     handleClick: (value: boolean) => void;
 }
 
-const Login: React.FC<ILoginProps> = ({handleClick}) => {
+const Register: React.FC<IRegisterProps> = ({handleClick}) => {
 
-    const {loading, userInfo, userToken, error} = useAppSelector((state) => state.auth)
+    const {loading, userInfo, userToken, success} = useAppSelector((state) => state.auth)
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
 
     useEffect(() => {
-        if (userToken) {
-            navigate('/dashboard')
-        }
-    }, [navigate, userToken])
+        if (success && userToken) navigate('/dashboard')
+    }, [navigate, userToken, success])
 
     const onFinish: FormProps<FieldType>['onFinish'] = (values) => {
-        const {username, password} = values
-        dispatch(userLogin({username, password}))
+        const {username, password, confirmPassword} = values
+        if(password === confirmPassword) {
+            dispatch(userRegister({username, password}))
+        } else {
+            dispatch(setError({message: 'Password mismatch!', type: 'error'}))
+        }
     };
 
     return (
@@ -37,13 +40,13 @@ const Login: React.FC<ILoginProps> = ({handleClick}) => {
             <Form
                 name="basic"
                 className={classes.formLogin}
-                labelCol={{span: 4}}
-                wrapperCol={{span: 20}}
+                labelCol={{span: 6}}
+                wrapperCol={{span: 18}}
                 onFinish={onFinish}
                 autoComplete="off"
             >
                 <div className={classes.formTitleLogin}>
-                    <h3>Please login to continue</h3>
+                    <h3>Please register to continue</h3>
                     <div className={classes.formLoginSpin}>
                         {loading && <Spin />}
                     </div>
@@ -65,16 +68,24 @@ const Login: React.FC<ILoginProps> = ({handleClick}) => {
                     <Input.Password/>
                 </Form.Item>
 
+                <Form.Item<FieldType>
+                    label="Confirm password"
+                    name="confirmPassword"
+                    rules={[{required: true, message: 'Please confirm your password!'}]}
+                >
+                    <Input.Password/>
+                </Form.Item>
+
                 <Form.Item className={classes.buttonLogin} wrapperCol={{span: 24}}>
                     <Button type="primary" htmlType="submit">
-                        Login
+                        Register
                     </Button>
                 </Form.Item>
 
                 <div className={classes.linkRegister}>
-                    Don't have an account?
-                    <div className={classes.buttonLink} onClick={() => handleClick(false)}>
-                        Register here
+                    Already have an account?
+                    <div className={classes.buttonLink} onClick={() => handleClick(true)}>
+                        Login here
                     </div>
                 </div>
             </Form>
@@ -82,4 +93,4 @@ const Login: React.FC<ILoginProps> = ({handleClick}) => {
     );
 };
 
-export default Login;
+export default Register;

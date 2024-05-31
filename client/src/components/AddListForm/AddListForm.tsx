@@ -15,7 +15,7 @@ const AddListForm: React.FC = () => {
 
     const addListTitle = (): void => {
         if(!listTitle) {
-            dispatch(setError('Please, add title for list'))
+            dispatch(setError({message: 'Please, add title for list', type: 'error'}))
         } else {
             const listItem = {
                 id: v4(),
