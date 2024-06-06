@@ -9,7 +9,7 @@ interface ICardFormProps {
     id: string;
     title: string;
     description?: string;
-    list: string;
+    listTitle: string;
 }
 
 type FieldType = {
@@ -17,14 +17,14 @@ type FieldType = {
     description?: string;
 };
 
-const CardForm: React.FC<ICardFormProps> = ({id, title, description, list}) => {
+const CardForm: React.FC<ICardFormProps> = ({id, title, description, listTitle}) => {
 
     const [submittable, setSubmittable] = React.useState<boolean>(false);
     const dispatch = useAppDispatch();
 
     const onFinish = (values: IEditFormValues): void => {
         setSubmittable(false)
-        dispatch(editCard({id, list, values}))
+        dispatch(editCard({id, listTitle, values}))
     };
 
     return (

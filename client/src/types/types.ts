@@ -9,6 +9,12 @@ export interface ICard {
     isSearchMatch: boolean;
 }
 
+export interface ICardExtended {
+    index: number;
+    listTitle: string;
+    cardItem: ICard;
+}
+
 export interface IListContent {
     title: string;
     tasks: ICard[];

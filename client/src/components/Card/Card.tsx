@@ -2,22 +2,19 @@ import React, {useState} from 'react';
 import CardForm from "./CardForm/CardForm";
 import CardImages from "./CardImages/CardImages";
 import {getImageUrl} from "../../utils/images";
-import {Modal, UploadFile} from 'antd';
-import {EditOutlined} from '@ant-design/icons';
+import {Button, Modal} from 'antd';
+import {EditOutlined, DeleteOutlined} from '@ant-design/icons';
+import {useAppDispatch} from "../../store/hooks";
+import {archiveCard} from "../../store/slices/boardSlice";
+import {addArchiveCard} from "../../store/slices/archiveSlice";
+import {ICardExtended} from "../../types/types";
 import classes from "./Card.module.css";
 
-interface ICardProps {
-    id: string;
-    title: string;
-    list: string;
-    description?: string;
-    images?: UploadFile[];
-    cover?: UploadFile;
-}
+const Card: React.FC<ICardExtended> = ({index, listTitle, cardItem }) => {
 
-const Card: React.FC<ICardProps> = ({id, title, description, list, images, cover}) => {
-
+    const {id, title, description, images, cover} = cardItem;
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+    const dispatch = useAppDispatch();
 
     const showModal = (): void => {
         setIsModalOpen(true);
@@ -25,6 +22,11 @@ const Card: React.FC<ICardProps> = ({id, title, description, list, images, cover
 
     const handleCancel = (): void => {
         setIsModalOpen(false);
+    };
+
+    const handleArchiveClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+        dispatch(archiveCard({id, listTitle}))
+        dispatch(addArchiveCard({index, listTitle, cardItem}))
     };
 
     return (
@@ -36,8 +38,9 @@ const Card: React.FC<ICardProps> = ({id, title, description, list, images, cover
             <Modal title="Edit card" open={isModalOpen} onCancel={handleCancel} footer={null}>
                 {cover && <img className={classes.imageCardCover} src={getImageUrl(cover.name)} alt={cover.name}/>}
 
-                <CardForm id={id} title={title} description={description} list={list} />
-                <CardImages id={id} list={list} images={images} cover={cover}/>
+                <CardForm id={id} title={title} description={description} listTitle={listTitle} />
+                <CardImages id={id} listTitle={listTitle} images={images} cover={cover}/>
+                <Button className={classes.buttonArchive} onClick={handleArchiveClick}>Archive<DeleteOutlined /></Button>
             </Modal>
         </div>
     );

@@ -1,0 +1,28 @@
+.cardContainer {
+    width: 200px;
+    margin: 0 auto 10px auto;
+    padding: 5px;
+    color: white;
+    background-color: #aeaeae;
+    border-radius: 7px;
+    position: relative;
+}
+
+.cardTitle {
+    text-align: left;
+}
+
+.restoreIcon {
+    position: absolute;
+    top: 5px;
+    right: 35px;
+    transform: scale(-1, 1);
+    cursor: pointer;
+}
+
+.deleteIcon {
+    position: absolute;
+    top: 5px;
+    right: 10px;
+    cursor: pointer;
+}

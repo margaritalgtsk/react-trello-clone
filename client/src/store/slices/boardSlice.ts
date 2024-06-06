@@ -20,25 +20,30 @@ interface IMoveCardActionPayload {
     cardCopy: ICard;
 }
 
-interface IEditItemActionPayload {
+interface IEditCardActionPayload {
     id: string;
-    list: string;
+    listTitle: string;
     values: IEditFormValues;
+}
+
+interface IArchiveCardActionPayload {
+    id: string;
+    listTitle: string;
 }
 
 interface IAddImageActionPayload {
     id: string;
-    list: string;
+    listTitle: string;
     file: UploadFile;
 }
 interface IRemoveImageActionPayload {
     id: string;
-    list: string;
+    listTitle: string;
     imageId: string;
 }
 interface ISetCoverImageActionPayload {
     id: string;
-    list: string;
+    listTitle: string;
     image: UploadFile | undefined;
 }
 
@@ -78,7 +83,15 @@ const initialState: IBoardState = {
                 {
                     id: 'id-126-feed-the-turtle',
                     title: 'feed the turtle',
-                    isSearchMatch: true
+                    isSearchMatch: true,
+                    images: [{
+                        uid: "rc-upload-1717665107147-2",
+                        name: "turtle.jpeg"
+                    }],
+                    cover: {
+                        uid: "rc-upload-1717665107147-2",
+                        name: "turtle.jpeg"
+                    }
                 },
                 {
                     id: 'id-128-feed-the-capybara',
@@ -123,8 +136,8 @@ export const boardSlice = createSlice({
             state.lists[action.payload.source.droppableId].tasks.splice(action.payload.source.index, 1)
             state.lists[action.payload.destination.droppableId].tasks.splice(action.payload.destination.index, 0, action.payload.cardCopy)
         },
-        editCard: (state, action: PayloadAction<IEditItemActionPayload>) => {
-            state.lists[action.payload.list].tasks.forEach((task: ICard): void => {
+        editCard: (state, action: PayloadAction<IEditCardActionPayload>) => {
+            state.lists[action.payload.listTitle].tasks.forEach((task: ICard): void => {
                 if(task.id === action.payload.id) {
                     if(task.title !== action.payload.values.title) {
                         task.title = action.payload.values.title
@@ -135,8 +148,18 @@ export const boardSlice = createSlice({
                 }
             })
         },
+        archiveCard: (state, action: PayloadAction<IArchiveCardActionPayload>) => {
+            const {id, listTitle} = action.payload;
+            const listToUpdate = state.lists[listTitle];
+            if (listToUpdate && listToUpdate.tasks) {
+                listToUpdate.tasks = listToUpdate.tasks.filter(task => task.id!== id);
+            }
+        },
+        restoreCard: (state, action: PayloadAction<IAddCardActionPayload>) => {
+            state.lists[action.payload.listTitle].tasks.push(action.payload.cardItem)
+        },
         addImage: (state, action: PayloadAction<IAddImageActionPayload>) => {
-            state.lists[action.payload.list].tasks.forEach((task: ICard): void => {
+            state.lists[action.payload.listTitle].tasks.forEach((task: ICard): void => {
                 if(task.id === action.payload.id) {
                     if(typeof task.images === "undefined") {
                         task.images = [];
@@ -146,7 +169,7 @@ export const boardSlice = createSlice({
             })
         },
         removeImage: (state, action: PayloadAction<IRemoveImageActionPayload>) => {
-            state.lists[action.payload.list].tasks.forEach((task: ICard): void => {
+            state.lists[action.payload.listTitle].tasks.forEach((task: ICard): void => {
                 if(task.id === action.payload.id) {
                     task.images = task.images?.filter(image => image.uid !== action.payload.imageId)
                     if(task.cover?.uid === action.payload.imageId) {
@@ -156,7 +179,7 @@ export const boardSlice = createSlice({
             })
         },
         setCoverImage: (state, action: PayloadAction<ISetCoverImageActionPayload>) => {
-            state.lists[action.payload.list].tasks.forEach((task: ICard): void => {
+            state.lists[action.payload.listTitle].tasks.forEach((task: ICard): void => {
                 if(task.id === action.payload.id) {
                     task.cover = action.payload.image
                 }
@@ -181,6 +204,8 @@ export const { addList,
     addCard,
     moveCard,
     editCard,
+    archiveCard,
+    restoreCard,
     addImage,
     removeImage,
     setCoverImage,

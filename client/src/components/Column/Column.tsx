@@ -50,12 +50,9 @@ const Column: React.FC<IColumnProps> = ({columnId, column, index}) => {
                                                             >
                                                                 <div className={`${classes.cardItem} ${draggingCardClass} ${el.isSearchMatch ? '' : classes.cardHidden}`}>
                                                                     <Card
-                                                                        id={el.id}
-                                                                        list={columnId}
-                                                                        title={el.title}
-                                                                        description={el.description}
-                                                                        images={el.images}
-                                                                        cover={el.cover}
+                                                                        index={index}
+                                                                        listTitle={columnId}
+                                                                        cardItem={el}
                                                                     />
                                                                 </div>
                                                             </div>

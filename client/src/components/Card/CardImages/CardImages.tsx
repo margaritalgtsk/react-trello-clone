@@ -11,11 +11,11 @@ import classes from "./CardImages.module.css";
 
 interface ICardUploadProps {
     id: string;
-    list: string;
+    listTitle: string;
     images?: UploadFile[];
     cover?: UploadFile;
 }
-const CardImages: React.FC<ICardUploadProps> = ({id, list,images, cover}) => {
+const CardImages: React.FC<ICardUploadProps> = ({id, listTitle, images, cover}) => {
 
     const dispatch = useAppDispatch();
 
@@ -28,7 +28,7 @@ const CardImages: React.FC<ICardUploadProps> = ({id, list,images, cover}) => {
         })
         .then(response => {
             if (response.ok) {
-                dispatch(addImage({ list, id, file: options.file as UploadFile}));
+                dispatch(addImage({ listTitle, id, file: options.file as UploadFile}));
             } else {
                 dispatch(setError({message: `Server error, ${response.statusText}`, type: 'error'}));
             }
@@ -39,7 +39,7 @@ const CardImages: React.FC<ICardUploadProps> = ({id, list,images, cover}) => {
     }
 
     const handleCheckboxChange = (e:CheckboxChangeEvent, image: UploadFile): void => {
-        dispatch(setCoverImage({id, list, image: e.target.checked ? image : undefined}))
+        dispatch(setCoverImage({id, listTitle, image: e.target.checked ? image : undefined}))
     };
 
     return (
@@ -66,7 +66,7 @@ const CardImages: React.FC<ICardUploadProps> = ({id, list,images, cover}) => {
                                     Make cover
                                 </Checkbox>
                                 <p className={classes.imageRemove}
-                                   onClick={() => dispatch(removeImage({id, list, imageId: image.uid }))}>
+                                   onClick={() => dispatch(removeImage({id, listTitle, imageId: image.uid }))}>
                                     Delete
                                 </p>
                             </div>

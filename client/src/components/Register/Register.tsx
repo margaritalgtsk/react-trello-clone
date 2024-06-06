@@ -38,7 +38,7 @@ const Register: React.FC<IRegisterProps> = ({handleClick}) => {
     return (
         <>
             <Form
-                name="basic"
+                name="register"
                 className={classes.formLogin}
                 labelCol={{span: 6}}
                 wrapperCol={{span: 18}}

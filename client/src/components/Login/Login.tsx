@@ -35,7 +35,7 @@ const Login: React.FC<ILoginProps> = ({handleClick}) => {
     return (
         <>
             <Form
-                name="basic"
+                name="login"
                 className={classes.formLogin}
                 labelCol={{span: 4}}
                 wrapperCol={{span: 20}}
