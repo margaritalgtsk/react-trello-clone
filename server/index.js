@@ -13,8 +13,8 @@ const adapter = new FileSync('./database.json')
 const db = low(adapter)
 
 const app = express();
-const port =8080;
-const jwt_secret = 'dsfdsfsdfdsvcsvdfgefg';
+const port = process.env.PORT || 8080;
+const jwt_secret = process.env.JWT_SECRET || 'dsfdsfsdfdsvcsvdfgefg';
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
