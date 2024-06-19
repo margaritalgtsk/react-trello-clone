@@ -1,7 +1,7 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit'
 import {MyData, userLogin, userRegister} from "../../asyncActions/authAction";
 
-interface IAuthState {
+export interface IAuthState {
     loading: boolean;
     userInfo: string | null;
     userToken: string;

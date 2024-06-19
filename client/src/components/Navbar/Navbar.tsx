@@ -11,7 +11,7 @@ const Navbar = () => {
             {userToken
                 ?
                     <>
-                        <NavLink to="/dashboard">Dashboard</NavLink>
+                        <NavLink to="/workspace">Workspace</NavLink>
                         <NavLink to="/profile">Profile</NavLink>
                     </>
                 :  <NavLink to="/">Home</NavLink>

@@ -48,7 +48,10 @@ const Column: React.FC<IColumnProps> = ({columnId, column, index}) => {
                                                                 {...provided.draggableProps}
                                                                 {...provided.dragHandleProps}
                                                             >
-                                                                <div className={`${classes.cardItem} ${draggingCardClass} ${el.isSearchMatch ? '' : classes.cardHidden}`}>
+                                                                <div className={`${classes.cardItem} 
+                                                                ${draggingCardClass} 
+                                                                ${el.isSearchMatch ? '' : classes.cardHidden}
+                                                                `}>
                                                                     <Card
                                                                         index={index}
                                                                         listTitle={columnId}

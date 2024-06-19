@@ -25,6 +25,10 @@
 }
 
 .buttonArchive {
-    display: block;
     margin-top: 10px;
+    display: flex;
+    align-items: center;
+}
+.buttonArchiveIcon {
+    padding-left: 5px;
 }

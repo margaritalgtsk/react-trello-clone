@@ -1,10 +1,11 @@
 .cardContainer {
     width: 200px;
     margin: 0 auto 10px auto;
-    padding: 5px;
+    padding: 5px 5px 5px 10px;
     color: white;
     background-color: #aeaeae;
     border-radius: 7px;
+    box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
     position: relative;
 }
 
@@ -16,7 +17,6 @@
     position: absolute;
     top: 5px;
     right: 35px;
-    transform: scale(-1, 1);
     cursor: pointer;
 }
 

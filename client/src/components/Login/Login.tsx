@@ -23,7 +23,7 @@ const Login: React.FC<ILoginProps> = ({handleClick}) => {
 
     useEffect(() => {
         if (userToken) {
-            navigate('/dashboard')
+            navigate('/workspace')
         }
     }, [navigate, userToken])
 

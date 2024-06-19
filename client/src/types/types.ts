@@ -9,12 +9,6 @@ export interface ICard {
     isSearchMatch: boolean;
 }
 
-export interface ICardExtended {
-    index: number;
-    listTitle: string;
-    cardItem: ICard;
-}
-
 export interface IListContent {
     title: string;
     tasks: ICard[];
@@ -25,6 +19,9 @@ export interface IList {
 }
 
 export interface IBoardState {
+    current: boolean;
+    id: string;
+    title: string;
     lists: IList;
     order: string[];
     searchQuery: string;

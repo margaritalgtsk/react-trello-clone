@@ -23,7 +23,7 @@ const Register: React.FC<IRegisterProps> = ({handleClick}) => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        if (success && userToken) navigate('/dashboard')
+        if (success && userToken) navigate('/workspace')
     }, [navigate, userToken, success])
 
     const onFinish: FormProps<FieldType>['onFinish'] = (values) => {

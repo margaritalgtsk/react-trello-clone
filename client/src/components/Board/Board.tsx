@@ -1,24 +1,19 @@
 import React from 'react';
-import {
-    DragDropContext,
-    Droppable,
-    DroppableProvided,
-    DropResult
-} from 'react-beautiful-dnd';
+import {DragDropContext, Droppable, DroppableProvided, DropResult} from 'react-beautiful-dnd';
+import {IList} from "../../types/types";
 import AddListForm from "../AddListForm/AddListForm";
 import Column from "../Column/Column";
-import {IList} from "../../types/types";
-import {useAppDispatch, useAppSelector} from "../../store/hooks";
-import {moveCard, reorderLists, selectOrder} from "../../store/slices/boardSlice";
+import {useAppDispatch} from "../../store/hooks";
+import {moveCard, reorderLists} from "../../store/slices/boardSlice";
 import classes from './Board.module.css';
 
 interface IBoardProps {
     lists: IList;
+    order: string[];
 }
 
-const Board: React.FC<IBoardProps> = ({lists}) => {
+const Board: React.FC<IBoardProps> = ({lists, order}) => {
 
-    const columnOrder = useAppSelector(selectOrder);
     const dispatch = useAppDispatch();
 
     const handleDragEnd = ({destination , source, type, draggableId}: DropResult): void => {
@@ -26,7 +21,7 @@ const Board: React.FC<IBoardProps> = ({lists}) => {
             return
         }
         if(type === 'column') {
-            const newColumnOrder = Array.from(columnOrder);
+            const newColumnOrder = Array.from(order);
             newColumnOrder.splice(source.index, 1);
             newColumnOrder.splice(destination.index, 0, draggableId);
             dispatch(reorderLists(newColumnOrder))
@@ -49,7 +44,7 @@ const Board: React.FC<IBoardProps> = ({lists}) => {
                             ref={provided.innerRef}
                             {...provided.droppableProps}
                         >
-                            {columnOrder.map((columnId: string, index: number) => {
+                            {order.map((columnId: string, index: number) => {
                                 return (
                                     <Column key={columnId} columnId={columnId} column={lists[columnId]} index={index}/>
                                 )

@@ -1,13 +1,7 @@
 import React from 'react';
-import {BrowserRouter, Route, Routes} from "react-router-dom";
 import {ConfigProvider} from "antd";
-import Search from "./components/Search/Search";
+import AppRouter from "./components/AppRouter";
 import Error from "./components/Error";
-import Home from "./components/Home/Home";
-import NotFound from "./components/NotFound/NotFound";
-import Layout from "./layouts/Layout";
-import Profile from "./components/Profile/Profile";
-import PrivateRoute from "./components/PrivateRoute/PrivateRoute";
 import './App.css';
 
 function App() {
@@ -26,16 +20,7 @@ function App() {
                     }
                 }}
             >
-                <BrowserRouter>
-                    <Routes>
-                        <Route path="/" element={<Layout />}>
-                            <Route index element={<Home/>} />
-                            <Route path="/dashboard" element={<PrivateRoute Component={Search} />} />
-                            <Route path="/profile" element={<PrivateRoute Component={Profile} />} />
-                            <Route path="*" element={<NotFound/>}/>
-                        </Route>
-                    </Routes>
-                </BrowserRouter>
+                <AppRouter />
                 <Error />
             </ConfigProvider>
       </div>

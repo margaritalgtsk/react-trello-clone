@@ -6,7 +6,7 @@ interface IPrivateRouteProps {
     Component: any;
 }
 
-const PrivateRoute: React.FC<IPrivateRouteProps> = ({ Component }) => {
+const PrivateRoute: React.FC<IPrivateRouteProps> = ({ Component}) => {
 
     const {userToken} = useAppSelector((state) => state.auth)
 

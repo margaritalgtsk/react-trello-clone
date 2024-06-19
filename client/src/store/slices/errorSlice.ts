@@ -1,7 +1,7 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit'
 import {RootState} from "../index";
 
-interface IErrorState {
+export interface IErrorState {
     message: string;
     type: string;
 }

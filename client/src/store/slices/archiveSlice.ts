@@ -1,20 +1,29 @@
 import {createSlice, type PayloadAction} from '@reduxjs/toolkit'
 import {RootState} from "../index";
-import {ICardExtended} from "../../types/types";
+import {ICard} from "../../types/types";
 
-interface IArchiveState {
-    archive: ICardExtended[];
+export interface IArchiveItem {
+    boardId: string;
+    listTitle: string;
+    task: ICard;
+    index: number;
+}
+
+export interface IArchiveState {
+    archive: IArchiveItem[];
 }
 
 const initialState: IArchiveState = {
     archive: [
-        {   index: 3,
+        {
+            boardId: '123-123-123',
             listTitle: 'done',
-            cardItem: {
-                id: 'id-129-feed-the-capybara',
-                title: 'feed the capybara',
-                isSearchMatch: true
-            }
+            task: {
+                     id: 'id-129-feed-the-capybara',
+                     title: 'feed the capybara',
+                     isSearchMatch: true,
+                },
+            index: 3
         }
     ]
 };
@@ -23,15 +32,15 @@ export const archiveSlice = createSlice({
     name: 'archive',
     initialState,
     reducers: {
-        addArchiveCard: (state, action: PayloadAction<ICardExtended>) => {
+        addToArchiveCard: (state, action: PayloadAction<IArchiveItem>) => {
             state.archive.push(action.payload)
         },
         removeArchiveCard: (state, action: PayloadAction<string>) => {
-            state.archive = state.archive.filter(task => task.cardItem.id !== action.payload)
+            state.archive = state.archive.filter(item => item.task.id !== action.payload)
         }
     }
 })
 
-export const {addArchiveCard, removeArchiveCard} = archiveSlice.actions;
+export const {addToArchiveCard, removeArchiveCard} = archiveSlice.actions;
 export const selectArchiveCards = (state: RootState) => state.archive.archive;
 export default archiveSlice.reducer;

@@ -18,7 +18,7 @@ const Layout = () => {
             <Header handleMenuClick={handleMenuClick} isBoardMenu={isBoardMenu}/>
             <main className={classes.main}>
                 <Outlet />
-                {isBoardMenu && <PrivateRoute Component={BoardMenu} />}
+                {isBoardMenu && <PrivateRoute Component={BoardMenu}/>}
             </main>
         </div>
     );
