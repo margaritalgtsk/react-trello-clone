@@ -1,11 +1,20 @@
 .header {
-    background-color: #0E8777;
+    height: 50px;
+  /*  background-color: #0E8777;*/
+    background-color: #489992;
     padding: 10px;
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
+    position: relative;
 }
 
-.buttonMenu {
+/*.buttonMenu {
     width: 69px;
+    position: absolute;
+    right: 10px;
+}*/
+.buttonLogout {
+    position: absolute;
+    right: 10px;
 }

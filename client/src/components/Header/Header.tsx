@@ -5,12 +5,7 @@ import {logout} from "../../store/slices/authSlice";
 import {Button} from "antd";
 import classes from "./Header.module.css";
 
-interface IHeaderProps {
-    handleMenuClick: (value: boolean) => void;
-    isBoardMenu: boolean;
-}
-
-const Header: React.FC<IHeaderProps> = ({handleMenuClick, isBoardMenu}) => {
+const Header = () => {
 
     const {userToken} = useAppSelector((state) => state.auth)
     const dispatch = useAppDispatch();
@@ -18,15 +13,10 @@ const Header: React.FC<IHeaderProps> = ({handleMenuClick, isBoardMenu}) => {
     return (
         <header className={classes.header}>
             {userToken &&
-                <Button className={classes.buttonLogout} onClick={() => {
-                        dispatch(logout());
-                        handleMenuClick(false);
-                    }
-                }>
+                <Button className={classes.buttonLogout} onClick={() => dispatch(logout())}>
                     Logout
                 </Button>}
             <Navbar/>
-            {userToken && <Button className={classes.buttonMenu} onClick={() => handleMenuClick(false)}>{isBoardMenu ? 'Close' : 'Menu'}</Button>}
         </header>
     );
 };

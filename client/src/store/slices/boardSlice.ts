@@ -1,6 +1,7 @@
 import {createSlice} from '@reduxjs/toolkit';
 import type {PayloadAction} from '@reduxjs/toolkit';
 import {IBoardState, ICard, IDraggableProps, IEditFormValues} from "../../types/types";
+import {IArchiveList} from "./archiveSlice";
 import {RootState} from "../index";
 import {UploadFile} from "antd";
 import {v4} from "uuid";
@@ -35,6 +36,7 @@ interface IRemoveFromBoardCardActionPayload {
 interface IRestoreCardActionPayload {
     index: number;
     cardItem: ICard;
+    listId: string;
     listTitle: string;
 }
 
@@ -60,104 +62,130 @@ const initialState: IBoardState[] = [
     {
         current: false,
         id: '123-123-123',
-        title: 'Start Board',
+        title: 'Project Management',
         lists: {
-            'todo': {
+            'id-todo-1': {
+                listId: 'id-todo-1',
                 title: 'Todo',
                 tasks: [
                     {
-                        id: 'id-123-feed-the-cat',
-                        title: 'feed the cat',
+                        id: 'id-123-edit-email-drafts',
+                        title: 'Edit email drafts',
                         isSearchMatch: true
                     },
                     {
-                        id: 'id-124-feed-the-dog',
-                        title: 'feed the dog',
+                        id: 'id-124-curate-customer-list',
+                        title: 'Curate customer list',
                         isSearchMatch: true,
                         images: [{
-                            uid: "rc-upload-1716805931623-2",
-                            name: "dog.jpg"
+                            uid: "rc-upload-1718881067288-2",
+                            name: "Email_Etiquette.png"
                         }],
                         cover: {
-                            uid: "rc-upload-1716805931623-2",
-                                name: "dog.jpg"
+                            uid: "rc-upload-1718881067288-2",
+                                name: "Email_Etiquette.png"
                         }
                     }
                 ]
             },
-            'in-progress': {
+            'id-in-progress-1': {
+                listId: 'id-in-progress-1',
                 title: 'In Progress',
                     tasks: [
                         {
-                            id: 'id-125-feed-the-parrot',
-                            title: 'feed the parrot',
-                            isSearchMatch: true
-                        },
-                        {
-                            id: 'id-126-feed-the-turtle',
-                            title: 'feed the turtle',
+                            id: 'id-126-social-media-assets',
+                            title: 'Social media assets',
                             isSearchMatch: true,
                             images: [{
                                 uid: "rc-upload-1717665107147-2",
-                                name: "turtle.jpeg"
+                                name: "jeremy-bezanger-oxrk8fg2aig-unsplash.jpg"
                             }],
                             cover: {
                                 uid: "rc-upload-1717665107147-2",
-                                name: "turtle.jpeg"
+                                name: "jeremy-bezanger-oxrk8fg2aig-unsplash.jpg"
                             }
+                        },
+                        {
+                            id: 'id-125-sketch-site-banner',
+                            title: 'Sketch site banner',
+                            isSearchMatch: true
                         }
                     ]
             },
-            'done': {
+            'id-done-1': {
+                listId: 'id-done-1',
                 title: 'Completed',
                     tasks: [
                         {
-                            id: 'id-127-feed-the-mouse',
-                            title: 'feed the mouse',
+                            id: 'id-129-freelancer-contracts',
+                            title: 'Freelancer contracts',
                             isSearchMatch: true
                         },
                         {
-                            id: 'id-129-feed-the-dingo',
-                            title: 'feed the dingo',
-                            isSearchMatch: true
+                            id: 'id-129-project-proposal',
+                            title: 'Project Proposal',
+                            isSearchMatch: true,
+                            images: [{
+                                uid: "rc-upload-1718880041865-2",
+                                name: "preview-page0.jpg"
+                            }],
+                            cover: {
+                                uid: "rc-upload-1718880041865-2",
+                                name: "preview-page0.jpg"
+                            }
                         }
                 ]
             }},
-        order: ['todo', 'in-progress', 'done'],
+        order: ['id-todo-1', 'id-in-progress-1', 'id-done-1'],
         searchQuery: ''
     }, {
         current: false,
         id: '321-321-321',
-        title: 'New Board',
+        title: 'Remote Team',
         lists : {
-            'todo': {
+            'id-todo-2': {
+                listId: 'id-todo-2',
                 title: 'Todo',
                 tasks: [
                     {
-                        id: 'id-125-feed-the-parrot',
-                        title: 'feed the parrot',
+                        id: 'id-125-working-hours',
+                        title: 'Working Hours',
+                        isSearchMatch: true
+                    }
+                ]
+            },
+            'id-in-progress-2': {
+                listId: 'id-in-progress-2',
+                title: 'In Progress',
+                tasks: [
+                    {
+                        id: 'id-125-blog-redesign',
+                        title: 'Blog Redesign',
                         isSearchMatch: true,
                         images: [{
-                            uid: "rc-upload-1718804008576-2",
-                            name: "parrot.webp"
+                            uid: "rc-upload-1719227684487-2",
+                            name: "10ways3.webp"
                         }],
                         cover: {
-                            uid: "rc-upload-1718804008576-2",
-                            name: "parrot.webp"
+                            uid: "rc-upload-1719227684487-2",
+                            name: "10ways3.webp"
                         }
                     }
                 ]
             },
-            'in-progress': {
-                title: 'In Progress',
-                tasks: []
-            },
-            'done': {
+            'id-done-2': {
+                listId: 'id-done-2',
                 title: 'Completed',
-                tasks: []
+                tasks: [
+                    {
+                        id: 'id-125-ebook-campaign',
+                        title: 'Ebook Campaign',
+                        isSearchMatch: true
+                    }
+                ]
             }
         },
-        order: ['todo', 'in-progress', 'done'],
+        order: ['id-todo-2', 'id-in-progress-2', 'id-done-2'],
         searchQuery: ''
     }
 ]
@@ -176,35 +204,63 @@ export const boardSlice = createSlice({
                 board.current = false;
             })
         },
-        addBoard: (state, action: PayloadAction<any>) => {
+        addBoard: (state, action: PayloadAction<string>) => {
             state.push({
                 current: false,
                 id: v4(),
-                title: action.payload.title,
+                title: action.payload,
                 lists : {
-                    'todo': {
+                    'id-todo-new': {
+                        listId: 'id-todo-new',
                         title: 'Todo',
                         tasks: []
                     },
-                    'in-progress': {
+                    'id-in-progress-new': {
+                        listId: 'id-in-progress-new',
                         title: 'In Progress',
                         tasks: []
                     },
-                    'done': {
+                    'id-done-new': {
+                        listId: 'id-done-new',
                         title: 'Completed',
                         tasks: []
                     }
                 },
-                order: ['todo', 'in-progress', 'done'],
+                order: ['id-todo-new', 'id-in-progress-new', 'id-done-new'],
                 searchQuery: ''
             })
+        },
+        removeBoard: (state) => {
+            return state.filter(board => !board.current)
+
         },
         addList: (state, action: PayloadAction<IAddListActionPayload>) => {
             const {id, title} = action.payload
             state.forEach(board => {
                 if(board.current) {
-                    board.lists[id] = {title, tasks: []}
+                    board.lists[id] = {listId: id, title, tasks: []}
                     board.order.push(id)
+                }
+            })
+        },
+        removeListFromBoard: (state, action: PayloadAction<string>) => {
+            state.forEach((board) => {
+                if (board.current) {
+                    Object.keys(board.lists).forEach((listKey) => {
+                        if (board.lists[listKey].listId === action.payload) {
+                            delete board.lists[listKey];
+                        }
+                    });
+                    board.order = board.order.filter(item => item !== action.payload);
+                }
+            });
+        },
+        restoreList: (state, action: PayloadAction<IArchiveList>) => {
+            const {listId, title, tasks, index} = action.payload
+            state.forEach(board => {
+                if (board.current) {
+                    board.lists[listId] = {listId, title, tasks}
+                    board.order.splice(index, 0, listId);
                 }
             })
         },
@@ -253,7 +309,7 @@ export const boardSlice = createSlice({
         restoreCard: (state, action: PayloadAction<IRestoreCardActionPayload>) => {
             state.forEach(board => {
                 if (board.current) {
-                    board.lists[action.payload.listTitle].tasks.splice(action.payload.index, 0, action.payload.cardItem);
+                    board.lists[action.payload.listId].tasks.splice(action.payload.index, 0, action.payload.cardItem);
                 }
             })
         },
@@ -320,7 +376,13 @@ export const boardSlice = createSlice({
 })
 
 
-export const { setCurrent, resetCurrent, addBoard, addList,
+export const { setCurrent,
+    resetCurrent,
+    addBoard,
+    removeBoard,
+    addList,
+    removeListFromBoard,
+    restoreList,
     addCard,
     moveCard,
     editCard,

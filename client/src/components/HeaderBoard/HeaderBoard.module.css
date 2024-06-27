@@ -1,0 +1,12 @@
+.header {
+    height: 50px;
+    padding: 10px;
+    background-color: #489992;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.title {
+    color: white;
+}

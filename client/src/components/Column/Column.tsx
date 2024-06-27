@@ -1,11 +1,15 @@
-import React from 'react';
+import React, {useState} from 'react';
+import {useDispatch} from "react-redux";
 import {Draggable, DraggableProvided, DraggableStateSnapshot, Droppable, DroppableProvided} from "react-beautiful-dnd";
 import Card from "../Card/Card";
-import {ICard, IListContent} from "../../types/types";
 import AddCardForm from "../AddCardForm/AddCardForm";
-import classes from "./Column.module.css"
+import {ICard, IListContent} from "../../types/types";
 import {useAppSelector} from "../../store/hooks";
-import {selectSearchQuery} from "../../store/slices/boardSlice";
+import {removeListFromBoard, selectCurrentBoardId, selectSearchQuery} from "../../store/slices/boardSlice";
+import {addListToArchive} from "../../store/slices/archiveSlice";
+import {Button} from "antd";
+import {EllipsisOutlined, CloseOutlined} from '@ant-design/icons';
+import classes from "./Column.module.css"
 
 interface IColumnProps {
     columnId: string;
@@ -15,7 +19,22 @@ interface IColumnProps {
 
 const Column: React.FC<IColumnProps> = ({columnId, column, index}) => {
 
+    const [isListAction, setIsListAction] = useState<boolean>(false);
     const searchQuery = useAppSelector(selectSearchQuery);
+    const boardId = useAppSelector(selectCurrentBoardId);
+    const dispatch = useDispatch();
+
+    const handleArchiveList = (column: IListContent) => {
+        dispatch(removeListFromBoard(column.listId))
+        const itemArchiveList = {
+            boardId,
+            listId: column.listId,
+            title: column.title,
+            tasks: column.tasks,
+            index
+        }
+        dispatch(addListToArchive(itemArchiveList))
+    }
 
     return (
         <Draggable draggableId={columnId} index={index} key={columnId}>
@@ -27,9 +46,18 @@ const Column: React.FC<IColumnProps> = ({columnId, column, index}) => {
                         ref={provided.innerRef}
                         {...provided.draggableProps}
                     >
+                        <EllipsisOutlined className={classes.listActionsOpen} onClick={() => setIsListAction(true)}/>
+                        {isListAction &&
+                            <>
+                                <div className={classes.listActions}>
+                                    <div  className={classes.listActionsTitle}>List Actions</div>
+                                    <CloseOutlined  className={classes.listActionsClose} onClick={() => setIsListAction(false)}/>
+                                    <Button type="text" onClick={() =>handleArchiveList(column)}>Archive List</Button>
+                                </div>
+                            </>
+                        }
                         <h3  {...provided.dragHandleProps}>{column.title}</h3>
                         {searchQuery && <p className={classes.matchFilters}>{column.tasks.filter(task => task.isSearchMatch).length} cards match filters</p>}
-
                         <Droppable droppableId={columnId} type="task">
                             {(provided: DroppableProvided) => {
                                 return (
@@ -54,8 +82,10 @@ const Column: React.FC<IColumnProps> = ({columnId, column, index}) => {
                                                                 `}>
                                                                     <Card
                                                                         index={index}
-                                                                        listTitle={columnId}
                                                                         cardItem={el}
+                                                                        listId={column.listId}
+                                                                        listTitle={columnId}
+                                                                        boardId={boardId}
                                                                     />
                                                                 </div>
                                                             </div>

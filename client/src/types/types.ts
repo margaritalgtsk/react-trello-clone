@@ -10,6 +10,7 @@ export interface ICard {
 }
 
 export interface IListContent {
+    listId: string;
     title: string;
     tasks: ICard[];
 }

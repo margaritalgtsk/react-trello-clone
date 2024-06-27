@@ -9,11 +9,12 @@ import classes from "./CardArchive.module.css";
 
 interface ICardArchiveProps {
     index: number;
+    listId: string;
     listTitle: string;
     cardItem: ICard;
 }
 
-const CardArchive: React.FC<ICardArchiveProps> = ({index, listTitle, cardItem}) => {
+const CardArchive: React.FC<ICardArchiveProps> = ({index, listId, listTitle, cardItem}) => {
 
     const dispatch = useDispatch();
 
@@ -24,7 +25,7 @@ const CardArchive: React.FC<ICardArchiveProps> = ({index, listTitle, cardItem}) 
                 <FaTrashArrowUp
                     className={classes.restoreIcon}
                     onClick={() => {
-                        dispatch(restoreCard({index, listTitle, cardItem}))
+                        dispatch(restoreCard({index, listId, listTitle, cardItem}))
                         dispatch(removeArchiveCard(cardItem.id))
                     }}
                 />

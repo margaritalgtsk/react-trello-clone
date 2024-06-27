@@ -36,20 +36,20 @@ const Workspace = () => {
     };
 
     const onFinish: FormProps<FieldType>['onFinish'] = (values) => {
-        dispatch(addBoard({title: values.title}))
+        const {title} = values
+        dispatch(addBoard(title!))
         setIsModalOpen(false);
-        //navigate('/board/')
     };
 
     return (
 
-        <div className={classes.workspaceContainer}>
+        <div className={classes.container}>
             {boards.map(board =>
-                <div key={board.id} className={classes.workspaceBoard} onClick={() => handleClick(board.id)}>
+                <div key={board.id} className={`${classes.board} ${classes.availableBoard}`} onClick={() => handleClick(board.id)}>
                     {board.title}
                 </div>
             )}
-            <div className={`${classes.workspaceBoard} ${classes.workspaceAddBoard}`} onClick={showModal}>
+            <div className={`${classes.board} ${classes.addBoard}`} onClick={showModal}>
                 Add new board
             </div>
             <Modal title="Add new board" open={isModalOpen} onCancel={handleCancel} footer={null}>

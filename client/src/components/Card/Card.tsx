@@ -5,22 +5,23 @@ import {getImageUrl} from "../../utils/images";
 import {Button, Modal} from 'antd';
 import {EditOutlined} from '@ant-design/icons';
 import {FaTrash} from "react-icons/fa6";
-import {useAppDispatch, useAppSelector} from "../../store/hooks";
-import {removeFromBoardCard, selectCurrentBoardId} from "../../store/slices/boardSlice";
-import {addToArchiveCard} from "../../store/slices/archiveSlice";
+import {useAppDispatch} from "../../store/hooks";
+import {removeFromBoardCard} from "../../store/slices/boardSlice";
+import {addCardToArchive} from "../../store/slices/archiveSlice";
 import {ICard} from "../../types/types";
 import classes from "./Card.module.css";
 
 interface ICardProps {
     index: number;
-    listTitle: string;
     cardItem: ICard;
+    listId: string
+    listTitle: string;
+    boardId: string;
 }
 
-const Card: React.FC<ICardProps> = ({index, listTitle, cardItem }) => {
+const Card: React.FC<ICardProps> = ({index, cardItem, listId, listTitle,boardId }) => {
 
     const {id, title, description, images, cover} = cardItem;
-    const boardId = useAppSelector(selectCurrentBoardId);
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
     const dispatch = useAppDispatch();
 
@@ -34,7 +35,7 @@ const Card: React.FC<ICardProps> = ({index, listTitle, cardItem }) => {
 
     const handleArchiveClick = () => {
         dispatch(removeFromBoardCard({id, listTitle}))
-        dispatch(addToArchiveCard({boardId, listTitle, task: cardItem, index}))
+        dispatch(addCardToArchive({boardId, listId, listTitle, task: cardItem, index}))
     };
 
     return (

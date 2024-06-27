@@ -1,12 +1,13 @@
 .columnItem {
-    width: 200px;
+    width: 250px;
     margin-right: 20px;
     padding: 10px;
     background-color: white;
     border: 1px solid #d9d9d9;
-    border-radius: 10px;
+    border-radius: 12px;
     box-shadow: rgba(149, 157, 165, 0.2) 0 8px 24px;
     align-self: self-start;
+    position: relative;
 }
 
 .columnItem h3 {
@@ -16,18 +17,53 @@
 .columnItemDragging {
     background-color: #f5ead3;
 }
+.listActionsOpen {
+    position: absolute;
+    right: 10px;
+    cursor: pointer;
+}
+
+.listActions {
+    width: 250px;
+    margin-right: 20px;
+    padding: 10px;
+    background-color: white;
+    border: 1px solid #d9d9d9;
+    border-radius: 12px;
+    box-shadow: rgba(149, 157, 165, 0.2) 0 8px 24px;
+    align-self: self-start;
+    position: fixed;
+    z-index: 1;
+}
+.listActionsTitle {
+    color: #4f4f4f;
+    font-weight: 600;
+    margin-bottom: 15px;
+}
+
+.listActionsClose {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+}
 
 .matchFilters {
     color: #9E9E9E;
 }
 
 .cardItem {
-    color: white;
+    color: #172b4d;
     margin-bottom: 10px;
     padding: 5px;
-    background-color: #0E8777;
-    border: 1px solid white;
-    border-radius: 7px;
+    background-color: #edeef1;
+    border: 2px solid #edeef1;
+    border-radius: 8px;
+    box-shadow: 0 1px 1px #091e4240, 0 0 1px #091e424f;
+}
+
+.cardItem:hover {
+    border: 2px solid #489992;
 }
 
 .cardItemDragging {
